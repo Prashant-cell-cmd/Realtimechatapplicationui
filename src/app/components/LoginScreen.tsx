@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { MessageSquare, Server, ArrowRight } from 'lucide-react';
+import { MessageSquare, Server, ArrowRight, Activity, ShieldCheck, Globe } from 'lucide-react';
 
 interface LoginScreenProps {
   onJoin: (username: string) => void;
@@ -18,33 +18,43 @@ export function LoginScreen({ onJoin, isConnecting }: LoginScreenProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[#111214]">
+      {/* Background Subtle Grid */}
+      <div 
+        className="absolute inset-0 z-0 opacity-20"
+        style={{ 
+          backgroundImage: 'linear-gradient(#2b2d31 1px, transparent 1px), linear-gradient(90deg, #2b2d31 1px, transparent 1px)',
+          backgroundSize: '40px 40px' 
+        }}
+      />
+
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="w-full max-w-md bg-[#1e1f22] border border-[#2b2d31] rounded-lg shadow-2xl overflow-hidden z-10 mx-4"
       >
-        <div className="bg-indigo-600 p-8 text-center">
-          <div className="mx-auto bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm">
+        <div className="p-8 pb-6 text-center border-b border-[#2b2d31]">
+          <div className="mx-auto w-16 h-16 bg-[#5865f2] rounded-2xl flex items-center justify-center mb-4 shadow-lg">
             <MessageSquare className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Socket Chat</h1>
-          <p className="text-indigo-100 text-sm">C++ Client-Server Prototype</p>
+          <h1 className="text-2xl font-bold text-white mb-1">Welcome Back!</h1>
+          <p className="text-[#b5bac1] text-sm">We're so excited to see you again!</p>
         </div>
 
         <div className="p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-2">
-                Choose a Username
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="username" className="text-xs font-bold text-[#b5bac1] uppercase tracking-wide">
+                Username <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all text-slate-800"
-                placeholder="Ex: student_01"
+                className="w-full p-3 bg-[#111214] border border-transparent rounded-[3px] text-white placeholder-[#5e636e] focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-sm"
+                placeholder="Enter your username"
                 disabled={isConnecting}
                 autoFocus
               />
@@ -53,35 +63,29 @@ export function LoginScreen({ onJoin, isConnecting }: LoginScreenProps) {
             <button
               type="submit"
               disabled={!username.trim() || isConnecting}
-              className={`w-full py-3 px-4 rounded-lg flex items-center justify-center space-x-2 text-white font-medium transition-all ${
+              className={`w-full py-3 px-4 rounded-[3px] flex items-center justify-center space-x-2 text-white font-medium text-sm transition-all ${
                 !username.trim() || isConnecting 
-                  ? 'bg-indigo-300 cursor-not-allowed' 
-                  : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5'
+                  ? 'bg-[#5865f2] opacity-50 cursor-not-allowed' 
+                  : 'bg-[#5865f2] hover:bg-[#4752c4] active:scale-[0.98]'
               }`}
             >
               {isConnecting ? (
                 <>
-                  <Server className="w-5 h-5 animate-pulse" />
-                  <span>Connecting to Server...</span>
+                  <Server className="w-4 h-4 animate-spin" />
+                  <span>Connecting...</span>
                 </>
               ) : (
-                <>
-                  <span>Connect</span>
-                  <ArrowRight className="w-5 h-5" />
-                </>
+                <span>Log In</span>
               )}
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-slate-100">
-            <div className="flex items-start space-x-3 text-xs text-slate-500">
-              <div className="bg-slate-100 p-2 rounded-full shrink-0">
-                <Server className="w-4 h-4 text-slate-600" />
-              </div>
-              <p>
-                This client connects to the local C++ socket server. Ensure the backend is running on port 8080 before connecting.
-              </p>
+          <div className="mt-6 flex items-center justify-between text-xs text-[#949ba4]">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <span>Systems Operational</span>
             </div>
+            <span>v2.1.0 (Stable)</span>
           </div>
         </div>
       </motion.div>
